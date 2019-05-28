@@ -1,0 +1,97 @@
+---
+title: 'R Notebook '
+output:
+  html_notebook: default
+  pdf_document: default
+---
+---
+ 1. Load the data for this assignment into your R session with the following command:
+---
+```{r}
+library(ggplot2)
+data(diamonds)
+```
+---
+ 2. Check to see that the data were loaded by running. This should show ten variables:  carat, clarity, color, cut, depth,  price, table, x, y, z.
+---
+```{r}
+objects(diamonds)
+```
+
+3. Use the nrow() function to find out how many observations there are. Show the summary or the structure of this dataset.
+```{r}
+nrow(diamonds)
+summary(diamonds)
+```
+4. List the categorical variables in this dataset.
+
+```{r}
+my.cat.vars = diamonds[,c("cut","color","clarity")]
+my.cat.vars
+```
+5. What was the highest price of the diamonds ? What was the average price of the diamonds ? What is the number of the Ideal cut ?
+
+```{r}
+max(diamonds$price)
+mean(diamonds$price)
+summary(diamonds$cut)
+```
+6. What is the number of the diamonds which are Premium and have a clarity level of IF?
+summary(diamonds$cut=="Premium" & diamonds$clarity=="IF")
+
+9. What is the average price difference between the clarity level SI2 and IF?
+
+```{r}
+avg.prices = aggregate(diamonds$price, by=list(diamonds$clarity),FUN=mean)
+avg.prices$x[avg.prices$Group.1 == 'SI2'] - avg.prices$x[avg.prices$Group.1 == 'IF']
+```
+
+10. Total depth percentage is represented as the depth divided by the mean of the length and width of the diamond, 
+Try running each expression in R. Record the error message in a comment. Explain what it means. Be sure to directly relate the wording of the error message with the problem you find in the expression.
+
+```{r}
+# z/mean(x, y)
+```
+The error displayed is  "Error: object 'z' not found". This error appears since the object z is not loaded by itself but part of the data.frame. To access it, we must use diamonds$z.
+
+```{r}
+# diamonds$z/(mean(diamonds$x, diamonds$y))
+```
+The error displayed is "Error in mean.default(diamonds$x, diamonds$y) : 'trim' must be numeric of length one". Since the second option for the function mean() is trim it must be a fraction not a vector. 
+
+```{r}
+# diamonds$z/(rowMeans(diamonds$x, diamonds$y))
+```
+
+The error displayed is "Error in rowMeans(diamonds$x, diamonds$y) : 'x' must be an array of at least two dimensions". When you look at the documentation, the first input of rowMeans() ustve an array of two or more dimensions. So, we must concatenate both vectors first and use that as our input.
+
+11. Study the following code about how to do the calculation that we want for the previous question.
+
+```{r}
+Depth <- (diamonds$z)/rowMeans(cbind(diamonds$x, diamonds$y))
+```
+12. Can you get the same result without using function? Given an expression to it.  Name the values Depth1.
+
+```{r}
+my.avg = (diamonds$x+ diamonds$y)/2
+Depth1 = diamonds$z/my.avg
+```
+
+13. What did you get from all.equal(Depth, Depth1)? TRUE. These are two equivalent ways of obtaining the same result. 
+
+PART II. 
+1. Run the following code to make a plot. Use the Zoom button in the Plots window to enlarge the plot. Resize the plot so that it is long and short, so it is easier to read.
+
+```{r}
+plot(diamonds[1:1000,]$carat, diamonds[1:1000,]$price, xlab = "Carat", ylab = "Price", main = "Carat vs Price")
+```
+
+ 
+2. Make an interesting observation about the relation between Carat and Price based on this plot. 
+
+Looking at the plot, I see that after approxiately 0.5 carats the price skyrockets and mostly fall within the range of  2,500 and 3,000. So, if I ever get married I should get a higher carat ring that falls in the lower range of that price interval.
+
+3. What interesting question about the diamonds would you like to answer with these data, but don't yet know 
+how to do it? 
+
+I would like to if there is a way to determine which factor (carat, cut, clarity or depth)or combination of factors influences price the most.
