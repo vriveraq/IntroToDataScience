@@ -1,13 +1,5 @@
-# HW 7 - Due Monday Nov 13, 2017 in moodle and hardcopy in class. 
-# Upload R file to Moodle with filename: HW7_490IDS_YOURCLASSID.R
-# Do not remove any of the comments. These are marked by #
-
-### For this assignment will extract useful information from XML and 
-### use Google Earth for data visualization. 
-### The hw7.rda file containing the contry geographic coordinate is uploaded to Moodle.
-### Look at detail instructions for the assignment in hw7_Intro.pdf.
-
-
+# GOAL: Extract useful information from XML and use Google Earth for data visualization. 
+# DATA: The hw7.rda file containing the contry geographic coordinate is uploaded to Moodle.
 
 ### Part 1.  Create the data frame from XML file
 
@@ -18,6 +10,7 @@
 
 load("hw7.rda")
 head(LatLon)
+
 ### (b) Download the gzipped XML factbook document from
 ### http://jmatchparser.sourceforge.net/factbook/
 ### and create an XML "tree" in R 
@@ -194,7 +187,6 @@ for(i in 1:(dim(AllData)[1])) {
                pop=AllData$Population[[i]], infM=AllData$Infant.Mortality[[i]], parent=Document_Node3, inf1=infCut[[i]], pop1=popCut[[i]], 
                style=TRUE)
 }
-
 
 ### Finally, save your KML document, call it Part3.kml and open it in Google Earth to 
 ### verify that it works.  For this assignment, you only need to submit your code, 
