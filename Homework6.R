@@ -1,10 +1,7 @@
-# HW 6 - Due Monday Nov 6, 2017 in moodle and hardcopy in class. 
-# Upload your R file to Moodle with name: HW6_490IDS_YourClassID.R
-# Do Not remove any of the comments. These are marked by #
+# GOAL: Understand Monte Carlo Simulations, confidence intervals, and regular expressions.
+# DATA: State of Union Speeches (Part 2)
 
-# Please ensure that no identifying information (other than your class ID) is on your paper copy
-
-################################### Part 1: Simulation in R (15 pts) ##############################################
+################################### Part 1: Simulation in R ##############################################
 
 ## We will use the simulation techniques (Monte Carlo) introduced in class to generate confidence intervals for our estimates of distribution 
 #(a). As we will generate random numbers please set the seed using your classID. This will help with reproducibility. (1 pts)
@@ -63,7 +60,7 @@ MC_sample <- function(sample_size, B){
 }
 
 #(e).Plot your CI limits to compare the effect of changing the sample size and 
-# changing the number of simulation replications B (2 plots). What do you conclude? (3 pts)
+# changing the number of simulation replications B. What do you conclude? 
 sample.size = seq(100,1000,by=100)
 Bvector = seq(1000,10000,by=1000)
 
@@ -83,31 +80,31 @@ par(mfrow=c(1,2))
 plot(Bvector,CI.B[,1],main = "Lower CI limit ", xlab = "Bootstrap value (B)", ylab = "Lower CI Limit")
 plot(Bvector,CI.B[,2],main = "Upper CI limit ", xlab = "Bootstrap value (B)", ylab = "Upper CI Limit")
 
-################################### Part 2: Regular Expression(Regular Expression or R) (22 pts) ##############################################
+################################### Part 2: Regular Expression(Regular Expression or R) ##############################################
 
 #(a) Write down a general regular expression to match the following:(General Regular Expression)
 
-##(1) Words/tokens only have 's' as start or end. For example, stats, specifies, start, ends etc.(1 pts)
+##(1) Words/tokens only have 's' as start or end. For example, stats, specifies, start, ends etc.
 # ^s.*s$
 
-##(2) A string with the format <a>text</a>, <b>xxx</b> etc.(1 pts)
+##(2) A string with the format <a>text</a>, <b>xxx</b> etc.
 # <[^>].*>
 
-##(3) An email address that ends with .com, .edu, .net, .org, or .gov(1 pts)
-# ^[a-zA-Z0-9\-\.]+\.(com|edu|net|org|gov)$
-  
-#(b) Carry out the following exercises on the State of the Union Speeches dataset(available in moodle, stateoftheunion1790-2012.txt). (R)
-# (Suggestion: check the .txt data before coding the solutions and also lapply could be really helpful)
+##(3) An email address that ends with .com, .edu, .net, .org, or .gov ^[a-zA-Z0-9\-\.]+\.(com|edu|net|org|gov)$ 
+#(b) Carry out the following exercises on the State of the Union Speeches dataset
+#(available in moodle, stateoftheunion1790-2012.txt).(Suggestion: check the .txt data before coding the solutions and consider lapply())
 
-##(1) Use readLines() to read in the speeches where the return value is: character vector with one element/character string per line in the file save as su_data (1 pts)
+##(1) Use readLines() to read in the speeches where the return value is: 
+# character vector with one element/character string per line in the file save as su_data 
 su_data = readLines(file("stateoftheunion1790-2012.txt"))
 
-##(2) Use regular expressions and R to return the number of speeches in the dataset, and the number of presidents that gave speeches.(2 pts)
+##(2) Use regular expressions and R to return the number of speeches in the dataset, 
+# and the number of presidents that gave speeches.
 breaks = grep("\\*\\*\\*", su_data) #This finds the lines, where the addresses are separated
 length(breaks)  #Gives us the number of speeches
        
 ##(3) Use regular expressions to identify the date of the speech (save as su_date), extract the name of the speaker (save as su_speaker)
-## extract the year (save as su_year) and the month of the date (save as su_month) (4 pts)
+## extract the year (save as su_year) and the month of the date (save as su_month) 
 su_dates = su_data[breaks + 4]
 head(su_dates,n=3)
 
@@ -124,20 +121,17 @@ head(su_month)
 ## The length of su_speeches should be the number of speeches in the data. Check: does the length of your list match your answer above? (3 pts)
 
 # Looking at the text file we see each speech begins, 5 lines after the break and ends two lines before the break. 
-
 su_speeches=list()
 for (i in 1:(length(breaks)-1)){
   su_speeches[[i]] = paste(su_data[(breaks[i]+6):(breaks[i+1]-1)], sep=" ", collapse = " ")
 }
-
 length(su_speeches)
 
 # We can't use the same method for the last speach because there won't be a second break to indicate the end of the
 # previous speech and the beginnig of the next one. 
 su_speeches[[223]] = paste(su_data[(breaks[222]+6):breaks[223]], sep=" ", collapse = " ")
 
-##(5) Eliminate apostrophes, numbers, and the phrase: (Applause.) and make all the characters lowercase for each element in su_speeches. (3 pts)
-
+##(5) Eliminate apostrophes, numbers, and the phrase: (Applause.) and make all the characters lowercase for each element in su_speeches. 
 # It makes me nervous to alter the original set, so I will apply the changes by step and store them in different lists.
 replace = list()
 lowercase = list()
@@ -147,7 +141,7 @@ for (g in 1:length(su_speeches)){
 }
 
 ##(6) Split the speeches in su_speeches by blanks, punctuations. Drop any empty words that resulted from this split. 
-## Save the result to another list su_tokens.Each element in the su_tokens should be a vector of words in the speeches.(2 pts)
+## Save the result to another list su_tokens.Each element in the su_tokens should be a vector of words in the speeches.
 rem.punct = list()
 for (i in 1:length(lowercase)){
   rem.punct[[i]] = unlist(lapply(lowercase[[i]], strsplit , "[[:punct:]]|[[:blank:]]"))
@@ -159,17 +153,15 @@ for (i in 1:length(rem.punct)){
   su_tokens[[i]] = rem.punct[[i]][nchar(rem.punct[[i]])>0]
 }
  
-##(7) Based on su_tokens, create a list called su_frequency to calculate the token frequency for each token in each speech.(1 pts)
+##(7) Based on su_tokens, create a list called su_frequency to calculate the token frequency for each token in each speech.
 su_frequency = list()
-
 for (i in 1:length(su_tokens)){
      su_frequency[[i]] = table(su_tokens[[i]])
 }
 ##(8) Carry out some exploratory analysis of the data and term frequencies. For example, find the number of sentences, extract the
-## long words, and the political party. Plot and interpret the term frequencies. What are your observations? (3 pts)
+## long words, and the political party. Plot and interpret the term frequencies. What are your observations? 
 
-# To find the number of sentences per speech we need to use out su_speeches data and split them back into 
-# sentences
+# To find the number of sentences per speech we need to use out su_speeches data and split them back into sentences.
 sentences=list()
 for (i in 1:length(su_speeches)){
   test = sapply(su_speeches[[i]], strsplit , split = "\\. |\\? ")
