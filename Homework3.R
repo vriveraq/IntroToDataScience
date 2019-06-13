@@ -1,12 +1,6 @@
-# HW 3 - Due Monday  Oct 2, 2017. Upload R file to Moodle with name: HW3_490IDS_41.R
-# Do Not remove any of the comments. These are marked by #
-# The .R file will contain your code and answers to questions.
+# GOAL: Using the "apply" family of functions
 
-#ClassID:41
-
-# Main topic: Using the "apply" family of functions
-
-#Q1 (5 pts)
+#Q1 
 # Given a function below,
 myfunc <- function(z) return(c(z,z^2,(z^2+z)%/%2))
 #(a) explain in words what myfunc is doing.
@@ -49,7 +43,7 @@ times2.func <- function(z) return (2*z)
 apply(m,c(1,2),times2.func)
 
 
-#Q2 (10 pts)
+#Q2 
 #Create a list l with 2 elements as follows:
 l <- list(a = 1:10, b = 21:30)
 
@@ -72,7 +66,6 @@ class(lapply(l,sum))
 ### When looking at the documentation for both functions we see that lapply () returns a list
 ### while sapply() returns a vector or matrix which then when we apply the class() function ,
 ### we see by using sapply() we get "integer" and with lapply() we get an list as expected.
-
 
 
 #(d) Change one of them to make the two statement return the same results (type of object):
@@ -127,7 +120,7 @@ family$firstName[order(family$bmi,decreasing = TRUE)]
 #tapply(as.character(family$firstName),family$bmi, function(x) sort(x, decreasing = FALSE))
 #not sure why it doesn't sort it decreasingly with tapply()
 
-#Q4 (2 pts)
+#Q4 
 # There is a famous dataset in R called "iris." It should already be loaded
 # in R for you. If you type in ?iris you can see some documentation. Familiarize 
 # yourself with this dataset.
@@ -141,7 +134,7 @@ tapply(iris$Petal.Width, iris$Species, mean)
 by(iris[,1:4], iris$Species, colMeans) 
 
 
-#Q5. (5 pts) Now with the "iris" data, fit a simple linear regression model using lm() to predict 
+#Q5.(5 pts) Now with the "iris" data, fit a simple linear regression model using lm() to predict 
 # Petal length from Petal width. Place your code and output (the model) below. 
 model <- lm(Petal.Length ~ Petal.Width, data=iris)
 model
