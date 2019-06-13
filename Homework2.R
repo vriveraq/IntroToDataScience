@@ -1,21 +1,14 @@
-# HW 2 Due Monday Sept 25, 2017. Upload R file to Moodle with name: HW1_490ID_41.R
-# You can upload plots to Moodle in separate files and refer to them in your R file, or use an 
-# R notebook http://rmarkdown.rstudio.com/r_notebooks.html
 
-# Do not remove any of the comments. These are marked by #
 
-### Class ID: 41
+# GOAL: 
+# Practice how to manipulate a dataframe, such as taking subsets and creating new variables, with the goal of creating a plot.
 
-# In this assignment you will practice how to manipulate a dataframe, 
-# such as taking subsets and creating new variables, with the goal of creating a plot.
+# DATA: mtcars data in R library and a dataset called SFHousing. 
 
-# You will work with the mtcars data in R library and a dataset called SFHousing. 
-
-# Before beginning with the housing data however, you will do some warm up 
-# exercises with the small mtcars data set.
+# Before beginning with the housing data however, you will do some warm up exercises with the small mtcars data set.
 
 # PART 1. mtcars Data
-# Q1.(2 pts.)
+# Q1.
 # Use R to generate descriptions of the mtcars data which is already included in R base. 
 # The description could be a summary of each column and the dimensions of the dataset (hint: 
 # you may find the summary() command useful). Write up your descriptive findings and observations
@@ -34,7 +27,7 @@ dim(mtcars)
 ### we see that they are integers. The mean "mpg" and "hp" are 20.09 and
 ### 146.7 respectively.
 
-# Q2.(2 pts)
+# Q2.
 # Create a vector mpg_cl based on mpg in the dataset. 
 # For automatic cars, the vector should have value TRUE when mpg > 16 and value FALSE when mpg <= 16.
 # For manual cars, the vector should have value TRUE when mpg > 20 and value FALSE when mpg <= 20.
@@ -42,7 +35,7 @@ dim(mtcars)
 ### Your code below
 mpg_cl = (mtcars$am==1 & mtcars$mpg > 20) | (mtcars$am==0 & mtcars$mpg > 16)
 
-# Q3.(2 pts)
+# Q3.
 # Here is an alternative way to create the same vector in Q2.
 
 # First, we create a numeric vector mpg_index that is 16 for each automatic cars
@@ -65,7 +58,7 @@ mpg_index = id_val[mtcars$am+1]
 ### Your code below
 mpg_cl2 = mtcars$mpg>mpg_index
 
-# Q4.(2 pts)
+# Q4.
 # Make a plot of the variable disp against the variable weight. Color cars with different 
 # mpg_cl value differently, and also format your plots with appropriate labels. Describe any 
 # notable observations you have of the plot.
@@ -77,11 +70,10 @@ plot(mtcars$disp,mtcars$wt, col = as.factor(mpg_cl), xlab="Displacement",ylab="W
 ### to manual cars. In general, it seems that displacement and weight behave almost linear relation ship regardless of the type of transmission.
 
 #PART 2.  San Francisco Housing Data
-#
 # Load the data into R.
 load(url("https://www.stanford.edu/~vcs/StatData/SFHousing.rda"))
 
-# Q5. (2 pts.)
+# Q5. 
 # What objects are in SFHousing.rda? Give the name and class of each.
 ### Your code below
 ls()
@@ -118,7 +110,7 @@ dim(housing)
 ### This could skew the observations we can make about the data. 
 
 
-# Q6. (2 pts.)
+# Q6.
 # We will work the houses in Oakland, San Francisco, Campbell, and Sunnyvale only.
 # Subset the housing data frame so that we have only houses in these cities
 # and keep only the variables county, city, zip, price, br, bsqft, and year.
@@ -129,7 +121,7 @@ dim(housing)
 ### Your code below
 SelectArea = housing[c(housing$city=="Oakland"|housing$city=="San Francisco"|housing$city=="Campbell"|housing$city=="Sunnyvale"), c('county','city','zip','price','br','bsqft','year')]
 
-# Q7. (3 pts.)
+# Q7. 
 # We are interested in making plots of price and size of house, but before we do this
 # we will further subset the housing dataframe to remove the unusually large values.
 # Use the quantile function to determine the 95th percentile of price and bsqft
@@ -143,7 +135,7 @@ rem.NA = SelectArea[!is.na(SelectArea$bsqft),]
 SelectArea= rem.NA[c(rem.NA$price<quantile(rem.NA$price,0.95)&(rem.NA$bsqft<quantile(rem.NA$bsqft,0.95))),]
 
 
-# Q8 (2 pts.)
+# Q8 
 # Create a new vector that is called price_per_sqft by dividing the sale price by the square footage
 # Add this new variable to the data frame.
 
@@ -151,7 +143,7 @@ SelectArea= rem.NA[c(rem.NA$price<quantile(rem.NA$price,0.95)&(rem.NA$bsqft<quan
 price_per_sqft = SelectArea$price/SelectArea$bsqft
 SelectArea = cbind(SelectArea,price_per_sqft)
 
-# Q9 (2 pts.)
+# Q9 
 # Create a vector called br_new that is the number of bedrooms in the house, except
 # if this number is greater than 5, it is set to 5.  That is, if a house has 5 or more
 # bedrooms then br5 will be 5. Otherwise it will be the number of bedrooms.
@@ -190,7 +182,6 @@ plot(price_per_sqft ~ bsqft, data = SelectArea,
 legend(legend = 1:5, fill = rCols, "topright")
 
 ### What interesting feature do you see that you didn't know before making this plot? 
-# (2 pts.)
 ### On the plot, we see that the vertical spread of the observation gets smaller as the size of 
 ### of the house increases. This could indicated that while houses with more bedrooms have a higher price,
 ### when you distribute it according to the number of bedrooms it is not that high of a difference. 
